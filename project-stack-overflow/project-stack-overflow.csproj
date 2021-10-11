@@ -197,6 +197,10 @@
     <Compile Include="Migrations\202110081613144_AddComments.Designer.cs">
       <DependentUpon>202110081613144_AddComments.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202110112136420_ResolveQuestions.cs" />
+    <Compile Include="Migrations\202110112136420_ResolveQuestions.Designer.cs">
+      <DependentUpon>202110112136420_ResolveQuestions.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Answer.cs" />
@@ -276,6 +280,7 @@
     <Content Include="Views\Tags\Index.cshtml" />
     <Content Include="Views\Questions\AskQuestion.cshtml" />
     <Content Include="Views\Questions\Index.cshtml" />
+    <Content Include="Views\Questions\ViewQuestion.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -308,6 +313,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202110081613144_AddComments.resx">
       <DependentUpon>202110081613144_AddComments.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202110112136420_ResolveQuestions.resx">
+      <DependentUpon>202110112136420_ResolveQuestions.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

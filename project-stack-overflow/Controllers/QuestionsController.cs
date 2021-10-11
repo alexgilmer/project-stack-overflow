@@ -142,5 +142,19 @@ namespace project_stack_overflow.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
         }
+
+        public ActionResult ViewQuestion(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Question question = db.Questions.Find(id);
+            if (question == null)
+            {
+                return HttpNotFound();
+            }
+            return View(question);
+        }
     }
 }

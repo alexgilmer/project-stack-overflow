@@ -12,8 +12,33 @@
 }
 <h2>You are currently view page @ViewBag.CurrentPage of our results, at @ViewBag.ResultsPerPage results per page.</h2>
 
-@if (Model != null)
+@if (Model != null && Model.Count > 0)
 {
-
+	<main>
+		@foreach (var question in Model)
+		{
+			<article class="question-article">
+				<h4>
+					@Html.ActionLink(question.Title, "ViewQuestion", new { id = question.Id })
+				</h4>
+				<p>Resolved: TO BE IMPLEMENTED</p>
+				<p>Number of answers: @question.Answers.Count</p>
+			</article>
+		}
+	</main>
+}
+else
+{
+	<div class="alert alert-warning" role="alert">
+		Whoops!  It looks like something is broken!
+		@if (Model == null)
+		{
+			<p>Model came back null!</p>
+		}
+		else if (Model.Count == 0)
+		{
+			<p>Model came back empty!</p>
+		}
+	</div>
 }
 

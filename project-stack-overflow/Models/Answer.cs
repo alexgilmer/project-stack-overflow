@@ -15,6 +15,12 @@ namespace project_stack_overflow.Models
         public DateTime Date { get; set; }
         public int VoteTotal { get; set; }
         public string Body { get; set; }
+        public virtual ICollection<CommentAnswer> Comments { get; set; }
+        public bool CorrectAnswer { get; set; }
 
+        public Answer()
+        {
+            this.Comments = new HashSet<CommentAnswer>();
+        }
     }
 }

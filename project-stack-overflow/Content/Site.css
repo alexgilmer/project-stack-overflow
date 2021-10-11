@@ -47,3 +47,12 @@ label.tag-label {
     height: 15rem;
     resize: none;
 }
+
+.question-article {
+    padding: 15px;
+    background-color: lightgreen;
+}
+
+.question-article h4 {
+    background-color: lightcoral;
+}
