@@ -1,0 +1,19 @@
+﻿@model List<project_stack_overflow.Models.Question>
+
+@{
+	ViewBag.Title = "Index";
+}
+
+@if (ViewBag.SkippedTooMany == true)
+{
+	<div class="alert alert-warning" role="alert">
+		You tried to skip to a page that doesn't exist.  We've taken you to the last page, instead!
+	</div>
+}
+<h2>You are currently view page @ViewBag.CurrentPage of our results, at @ViewBag.ResultsPerPage results per page.</h2>
+
+@if (Model != null)
+{
+
+}
+

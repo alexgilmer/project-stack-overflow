@@ -1,0 +1,49 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+.tag-checkbox-container {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.tag-checkbox {
+    margin: 4px;
+}
+
+.tag-label:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+label.tag-label {
+    margin: 0;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 7px;
+    padding-right: 7px;
+}
+
+.question-title {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.question-body {
+    width: 100%;
+    height: 15rem;
+    resize: none;
+}

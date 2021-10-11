@@ -1,0 +1,41 @@
+﻿
+@{
+	ViewBag.Title = "AskQuestion";
+}
+
+<h2>Ask your question here!</h2>
+@using (Html.BeginForm())
+{
+	if (ViewBag.TitleError == true)
+	{
+		<div class="alert alert-danger" role="alert">
+			There seems to be something wrong with your title.  Please try again.
+		</div>
+	}
+	<input class="question-title" type="text" placeholder="Title of your question" name="title" value="@ViewBag.PostedTitle"/>
+	<br />
+	if (ViewBag.BodyError == true)
+	{
+		<div class="alert alert-danger" role="alert">
+			There seems to be somethign wrong with the body of your post.  Please try again.
+		</div>
+	}
+	<textarea class="question-body" placeholder="Put your question here!" name="body">@ViewBag.PostedBody</textarea>
+	<br />
+	<p>Tag your question, to make it easier for people to see it!</p>
+	if (ViewBag.TagList != null)
+	{
+		<div class="tag-checkbox-container">
+			@foreach (var tag in ViewBag.TagList)
+			{
+				<div class="tag-checkbox">
+					<Label class="tag-label">
+						<input type="checkbox" name="tags" value="@tag.Name" />
+						@tag.Name
+					</Label>
+				</div>
+			}
+		</div>
+	}
+	<input type="submit" value="Submit!" />
+}

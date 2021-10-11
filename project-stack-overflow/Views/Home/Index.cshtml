@@ -1,0 +1,47 @@
+﻿@model List<project_stack_overflow.Models.Question>
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>PossumOverflow</h1>
+    <p class="lead">PossumOverflow is a website for posting questions, and getting answers to those questions!</p>
+    <p><a href="https://mitt.ca/" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+</div>
+
+<h5>Here are some of our latest questions! @Html.ActionLink("...Or you can browse all of our questions!", "Index", "Questions")</h5>
+<table class="table table-hover table-bordered">
+    <thead>
+        <tr>
+            <th>
+                Date
+            </th>
+            <th>
+                Question
+            </th>
+            <th>
+                Asked by
+            </th>
+        </tr>
+    </thead>
+    @if (Model != null)
+	{
+        <tbody>
+            @foreach (var question in Model)
+			{
+                <tr>
+                    <td>
+                        @question.Date
+                    </td>
+                    <td>
+                        @question.Title
+                    </td>
+                    <td>
+                        @question.ApplicationUser.UserName
+                    </td>
+                </tr>
+			}
+        </tbody>
+	}
+</table>
