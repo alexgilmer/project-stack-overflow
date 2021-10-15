@@ -50,9 +50,24 @@ label.tag-label {
 
 .question-article {
     padding: 15px;
+    border: 1px solid black;
+}
+
+.question-article p.resolved span {
     background-color: lightgreen;
 }
 
-.question-article h4 {
+.question-article p.unresolved span {
     background-color: lightcoral;
+}
+
+a.question-tag-list {
+    text-decoration: none;
+    color: black;
+    display: inline-block;
+    margin-left: 5px;
+}
+
+a.question-tag-list:hover {
+    background-color: rgba(0, 0, 0, 0.3);
 }

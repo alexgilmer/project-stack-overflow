@@ -35,7 +35,7 @@
                         @question.Date
                     </td>
                     <td>
-                        @question.Title
+                        @Html.ActionLink(question.Title, "ViewQuestion", "Questions", new { id = question.Id }, null)
                     </td>
                     <td>
                         @question.ApplicationUser.UserName

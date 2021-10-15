@@ -1,4 +1,5 @@
-﻿using project_stack_overflow.Models;
+﻿using Microsoft.AspNet.Identity;
+using project_stack_overflow.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,20 +59,25 @@ namespace project_stack_overflow.Controllers
             return View(results.ToList());
         }
 
-        // TODO: Implement tagsearch view.
-        public ActionResult TagSearch()
+        public ActionResult TagSearch(int? TagSelect)
         {
-            ViewBag.TagList = db.Tags.ToList();
+            ViewBag.TagSelect = new SelectList(db.Tags.OrderBy(t => t.Name), "Id", "Name");
+            
+            if (TagSelect != null)
+            {
+                return TagSearch((int)TagSelect);
+            }
+
             return View();
         }
 
         [HttpPost]
-        public ActionResult TagSearch(int tagId)
+        public ActionResult TagSearch(int TagSelect)
         {
-            ViewBag.TagList = db.Tags.ToList();
+            ViewBag.TagSelect = new SelectList(db.Tags.OrderBy(t => t.Name), "Id", "Name");
 
-            var results = db.QuestionTags.Where(qt => qt.TagId == tagId).Select(qt => qt.Question);
-            return View(results.ToList());
+            var results = db.QuestionTags.Where(qt => qt.TagId == TagSelect).Select(qt => qt.Question).ToList();
+            return View(results);
         }
 
         
@@ -91,12 +97,12 @@ namespace project_stack_overflow.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 bool returnToView = false;
-                if (title == "")
+                if (string.IsNullOrEmpty(title))
                 {
                     ViewBag.TitleError = true;
                     returnToView = true;
                 }
-                if (body == "")
+                if (string.IsNullOrEmpty(body))
                 {
                     ViewBag.BodyError = true;
                     returnToView = true;
@@ -107,13 +113,13 @@ namespace project_stack_overflow.Controllers
                     ViewBag.PostedBody = body;
                     return View();
                 }
-
+                
                 Question newQ = new Question
                 {
                     Title = title,
                     Body = body,
                     VoteTotal = 0,
-                    ApplicationUserId = db.Users.First(u => u.UserName == User.Identity.Name).Id,
+                    ApplicationUserId = User.Identity.GetUserId(),
                     Date = DateTime.Now,
                 };
                 db.Questions.Add(newQ);
@@ -154,7 +160,44 @@ namespace project_stack_overflow.Controllers
             {
                 return HttpNotFound();
             }
+
+            if (User.IsInRole("Admin"))
+                ViewBag.UserIsAdmin = true;
+
             return View(question);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public ActionResult DeleteQuestion(int? id)
+        {
+            // TODO: Add confirmation click. 
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Question question = db.Questions.Find(id);
+            if (question == null)
+            {
+                return HttpNotFound();
+            }
+            /*
+            db.Questions.Remove(question);
+            db.SaveChanges();
+            */
+            return View(question);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult DeleteQuestion(int id)
+        {
+            Question question = db.Questions.Find(id);
+            if (question == null)
+                return HttpNotFound();
+
+            db.Questions.Remove(question);
+            db.SaveChanges();
+            return RedirectToAction("Index");
         }
     }
 }

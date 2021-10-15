@@ -1,0 +1,66 @@
+﻿@model List<project_stack_overflow.Models.Question>
+
+@{
+    ViewBag.Title = "TagSearch";
+}
+
+<h2>Tag Search</h2>
+<h3>Use this page to search our question database for questions by tag!</h3>
+
+@using (Html.BeginForm())
+{
+    <div>
+        <p>Please choose the tag for your search: @Html.DropDownList("TagSelect")</p>
+        <input type="submit" value="Submit" />
+    </div>
+}
+
+@if (Model != null)
+{
+    <h3>Here are your search results!</h3>
+    if (Model.Count == 0)
+	{
+        <h4>Sorry, there are no questions with that tag yet! @Html.ActionLink("You could be the first to ask one!", "AskQuestion", "Questions")</h4>
+	}
+	else
+	{
+<main>
+	@foreach (var question in Model)
+	{
+		<article class="question-article">
+			<h4>
+				@Html.ActionLink(question.Title, "ViewQuestion", new { id = question.Id })
+			</h4>
+			@if (question.Resolved)
+			{
+				<p class="resolved">
+					<span>Resolved: Yes</span>
+				</p>
+			}
+			else
+			{
+				<p class="unresolved">
+					<span>Resolved: No</span>
+				</p>
+			}
+			<p>Number of answers: @question.Answers.Count</p>
+			<p>
+				Tags:
+				@if (question.QuestionTags.Count == 0)
+				{
+					<span>None</span>
+				}
+				else
+				{
+					foreach (var qt in question.QuestionTags)
+					{
+						@Html.ActionLink(qt.Tag.Name, "TagSearch", "Questions", new { TagSelect = qt.TagId }, new { @class = "question-tag-list" })
+					}
+				}
+			</p>
+		</article>
+	}
+</main>
+	}
+}
+

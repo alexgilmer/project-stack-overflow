@@ -45,5 +45,9 @@
                 </div>
 			}
         </section>
+        @if (ViewBag.UserIsAdmin == true)
+		{
+            @Html.ActionLink("Delete this Question", "DeleteQuestion", new { id = Model.Id })
+		}
     </main>
 }

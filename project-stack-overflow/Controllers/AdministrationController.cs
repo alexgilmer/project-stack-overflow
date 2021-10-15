@@ -18,6 +18,7 @@ namespace project_stack_overflow.Controllers
             return View();
         }
         //Add a new Tag to the system
+
         //Give/Revoke Moderator priviledges
         //Ban/Unban Users
         //Go to Moderator Control Panel

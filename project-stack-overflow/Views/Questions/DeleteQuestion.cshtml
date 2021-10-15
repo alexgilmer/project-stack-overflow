@@ -1,0 +1,46 @@
+﻿@model project_stack_overflow.Models.Question
+@{
+	ViewBag.Title = "DeleteQuestion";
+}
+
+<h2>DeleteQuestion</h2>
+
+<h3>Are you sure you want to delete this question?</h3>
+
+<article class="question-article">
+	<h4>
+		@Html.ActionLink(Model.Title, "ViewQuestion", new { id = Model.Id })
+	</h4>
+	@if (Model.Resolved)
+	{
+		<p class="resolved">
+			<span>Resolved: Yes</span>
+		</p>
+	}
+	else
+	{
+		<p class="unresolved">
+			<span>Resolved: No</span>
+		</p>
+	}
+	<p>Number of answers: @Model.Answers.Count</p>
+	<p>
+		Tags:
+		@if (Model.QuestionTags.Count == 0)
+		{
+			<span>None</span>
+		}
+		else
+		{
+			foreach (var qt in Model.QuestionTags)
+			{
+				@Html.ActionLink(qt.Tag.Name, "TagSearch", "Questions", new { TagSelect = qt.TagId }, new { @class = "question-tag-list" })
+			}
+		}
+	</p>
+</article>
+
+@using (Html.BeginForm())
+{
+	<input type="submit" value="Confirm Delete" />
+}

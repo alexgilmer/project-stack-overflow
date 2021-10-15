@@ -21,8 +21,33 @@
 				<h4>
 					@Html.ActionLink(question.Title, "ViewQuestion", new { id = question.Id })
 				</h4>
-				<p>Resolved: TO BE IMPLEMENTED</p>
+				@if (question.Resolved)
+				{
+					<p class="resolved">
+						<span>Resolved: Yes</span>
+					</p>
+				}
+				else
+				{
+					<p class="unresolved">
+						<span>Resolved: No</span>
+					</p>
+				}
 				<p>Number of answers: @question.Answers.Count</p>
+				<p>
+					Tags: 
+					@if (question.QuestionTags.Count == 0)
+					{
+						<span>None</span>
+					}
+					else
+					{
+						foreach (var qt in question.QuestionTags)
+						{
+							@Html.ActionLink(qt.Tag.Name, "TagSearch", "Questions", new { TagSelect = qt.TagId }, new { @class="question-tag-list" })
+						}
+					}
+				</p>
 			</article>
 		}
 	</main>
