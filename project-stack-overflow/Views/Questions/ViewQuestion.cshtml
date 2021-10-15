@@ -41,6 +41,12 @@
 			<div class="question-comment-div">
 				<p>@comment.ApplicationUser.UserName on @comment.Date said:</p>
 				<p>@comment.Body</p>
+				@if (ViewBag.UserIsAdmin == true)
+				{
+					@Html.ActionLink("Edit this Comment", "Edit", "CommentQuestions", new { id = comment.Id }, null)
+					<br />
+					@Html.ActionLink("Delete this Comment", "Delete", "CommentQuestions", new { id = comment.Id }, null)
+				}
 			</div>
 		}
 	</section>
