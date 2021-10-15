@@ -303,5 +303,55 @@ namespace project_stack_overflow.Controllers
             return RedirectToAction("ViewQuestion", new { id });
         }
 
+        [Authorize]
+        public ActionResult CommentOnAnswer(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Answer answer = db.Answers.Find(id);
+            if (answer == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(answer);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult CommentOnAnswer(int id, string body)
+        {
+            Answer answer = db.Answers.Find(id);
+            if (answer == null)
+            {
+                return HttpNotFound();
+            }
+
+            if (string.IsNullOrEmpty(body))
+            {
+                ViewBag.EmptyCommentError = true;
+                return View(answer);
+            }
+
+            var user = db.Users.Find(User.Identity.GetUserId());
+            if (user == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            CommentAnswer ca = new CommentAnswer
+            {
+                Body = body,
+                ApplicationUser = user,
+                Date = DateTime.Now,
+                Answer = answer,
+            };
+            db.CommentAnswers.Add(ca);
+            db.SaveChanges();
+            return RedirectToAction("ViewQuestion", new { id = answer.QuestionId });
+        }
+
     }
 }

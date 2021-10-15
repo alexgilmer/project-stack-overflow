@@ -1,0 +1,33 @@
+﻿@model project_stack_overflow.Models.Answer
+
+@{
+	ViewBag.Title = "CommentOnAnswer";
+}
+
+<h2>Comment on this answer:</h2>
+<div class="answer-div">
+	<p>@Model.ApplicationUser.UserName answered on @Model.Date:</p>
+	<p>@Model.Body</p>
+</div>
+
+@if (ViewBag.EmptyCommentError == true)
+{
+	<div class="alert alert-danger" role="alert">
+		You are not allowed to submit empty comments.  Please try again.
+	</div>
+}
+@using (Html.BeginForm())
+{
+	<textarea class="post-body" placeholder="Put your comment here!" name="body"></textarea>
+	<input type="submit" value="Submit" />
+}
+
+
+
+
+
+
+
+
+
+

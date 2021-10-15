@@ -66,15 +66,16 @@
 			<div class="answer-div">
 				<p>@answer.ApplicationUser.UserName answered on @answer.Date:</p>
 				<p>@answer.Body</p>
-				<div class="answer-comment-container-div">
-					@foreach (var comment in answer.Comments)
-					{
-						<div class="answer-comment-div">
-							<p>@comment.ApplicationUser.UserName on @comment.Date said:</p>
-							<p>@comment.Body</p>
-						</div>
-					}
-				</div>
+				@Html.ActionLink("Comment on this Answer", "CommentOnAnswer", new { id = answer.Id })
+			</div>
+			<div class="answer-comment-container-div">
+				@foreach (var comment in answer.Comments)
+				{
+					<div class="answer-comment-div">
+						<p>@comment.ApplicationUser.UserName on @comment.Date said:</p>
+						<p>@comment.Body</p>
+					</div>
+				}
 			</div>
 		}
 	</section>

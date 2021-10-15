@@ -72,8 +72,11 @@ a.question-tag-list:hover {
     background-color: rgba(0, 0, 0, 0.3);
 }
 
-div.answer-div,
-question-comment-div {
+div.answer-div {
     border: 1px solid black;
 }
 
+.question-comment-div,
+.answer-comment-div {
+    border: 1px dashed orange;
+}

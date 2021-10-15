@@ -285,6 +285,7 @@
     <Content Include="Views\Questions\DeleteQuestion.cshtml" />
     <Content Include="Views\Questions\AnswerQuestion.cshtml" />
     <Content Include="Views\Questions\CommentOnQuestion.cshtml" />
+    <Content Include="Views\Questions\CommentOnAnswer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
