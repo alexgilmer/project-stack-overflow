@@ -72,6 +72,8 @@ a.question-tag-list:hover {
     background-color: rgba(0, 0, 0, 0.3);
 }
 
-div.answer-div {
+div.answer-div,
+question-comment-div {
     border: 1px solid black;
 }
+

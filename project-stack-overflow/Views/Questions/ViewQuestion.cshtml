@@ -18,6 +18,23 @@
 	<section class="view-question-body">
 		<p>@Model.Body</p>
 	</section>
+	<section class="view-question-tags">
+		<p>
+			Tags:
+			@if (Model.QuestionTags.Count == 0)
+			{
+				<span>None</span>
+			}
+			else
+			{
+				foreach (var qt in Model.QuestionTags)
+				{
+					@Html.ActionLink(qt.Tag.Name, "TagSearch", "Questions", new { TagSelect = qt.TagId }, new { @class = "question-tag-list" })
+				}
+			}
+		</p>
+
+	</section>
 	<section class="view-question-comments">
 		@foreach (var comment in Model.Comments)
 		{
@@ -27,6 +44,22 @@
 			</div>
 		}
 	</section>
+
+	<section class="view-question-links">
+		<p>
+			@Html.ActionLink("Answer this Question", "AnswerQuestion", new { id = Model.Id })
+		</p>
+		<p>
+			@Html.ActionLink("Comment on this Question", "CommentOnQuestion", new { id = Model.Id })
+		</p>
+		@if (ViewBag.UserIsAdmin == true)
+		{
+		<p>
+			@Html.ActionLink("Delete this Question", "DeleteQuestion", new { id = Model.Id })
+		</p>
+		}
+	</section>
+
 	<section class="view-question-answers">
 		@foreach (var answer in Model.Answers)
 		{
@@ -45,17 +78,5 @@
 			</div>
 		}
 	</section>
-	@if (ViewBag.UserMayAnswer == true)
-	{
-		<p>
-			@Html.ActionLink("Answer this Question", "AnswerQuestion", new { id = Model.Id })
-		</p>
-	}
-	@if (ViewBag.UserIsAdmin == true)
-	{
-		<p>
-			@Html.ActionLink("Delete this Question", "DeleteQuestion", new { id = Model.Id })
-		</p>
-	}
 </main>
 }

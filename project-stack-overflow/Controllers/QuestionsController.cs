@@ -173,7 +173,6 @@ namespace project_stack_overflow.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult DeleteQuestion(int? id)
         {
-            // TODO: Add confirmation click. 
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -183,10 +182,6 @@ namespace project_stack_overflow.Controllers
             {
                 return HttpNotFound();
             }
-            /*
-            db.Questions.Remove(question);
-            db.SaveChanges();
-            */
             return View(question);
         }
 
@@ -257,5 +252,56 @@ namespace project_stack_overflow.Controllers
             
             return RedirectToAction("ViewQuestion", new { id });
         }
+
+        [Authorize]
+        public ActionResult CommentOnQuestion(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Question question = db.Questions.Find(id);
+            if (question == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(question);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult CommentOnQuestion(int id, string body)
+        {
+            Question question = db.Questions.Find(id);
+            if (question == null)
+            {
+                return HttpNotFound();
+            }
+
+            if (string.IsNullOrEmpty(body))
+            {
+                ViewBag.EmptyCommentError = true;
+                return View(question);
+            }
+
+            var user = db.Users.Find(User.Identity.GetUserId());
+            if (user == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            CommentQuestion cq = new CommentQuestion
+            {
+                Body = body,
+                ApplicationUser = user,
+                Date = DateTime.Now,
+                Question = question,
+            };
+            db.CommentQuestions.Add(cq);
+            db.SaveChanges();
+            return RedirectToAction("ViewQuestion", new { id });
+        }
+
     }
 }

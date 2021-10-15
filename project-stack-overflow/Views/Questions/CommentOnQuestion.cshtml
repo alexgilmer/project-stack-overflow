@@ -1,0 +1,38 @@
+﻿@model project_stack_overflow.Models.Question
+
+@{
+	ViewBag.Title = "CommentOnQuestion";
+}
+
+<h2>Comment on this question:</h2>
+<section class="view-question-username">
+	<h4>Posted by: @Model.ApplicationUser.UserName</h4>
+</section>
+<section class="view-question-title">
+	<h4>@Model.Title</h4>
+</section>
+<section class="view-question-body">
+	<p>@Model.Body</p>
+</section>
+
+@if (ViewBag.EmptyCommentError == true)
+{
+	<div class="alert alert-danger" role="alert">
+		You are not allowed to submit empty comments.  Please try again.
+	</div>
+}
+@using (Html.BeginForm())
+{
+	<textarea class="post-body" placeholder="Put your comment here!" name="body"></textarea>
+	<input type="submit" value="Submit" />
+}
+
+
+
+
+
+
+
+
+
+
