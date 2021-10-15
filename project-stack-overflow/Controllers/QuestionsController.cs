@@ -164,6 +164,9 @@ namespace project_stack_overflow.Controllers
             if (User.IsInRole("Admin"))
                 ViewBag.UserIsAdmin = true;
 
+            if (User.Identity.IsAuthenticated && !question.Resolved)
+                ViewBag.UserMayAnswer = true;
+
             return View(question);
         }
 
@@ -198,6 +201,61 @@ namespace project_stack_overflow.Controllers
             db.Questions.Remove(question);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        [Authorize]
+        public ActionResult AnswerQuestion(int? id)
+        {
+            if (id == null)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            Question question = db.Questions.Find(id);
+
+            if (question == null)
+                return HttpNotFound();
+
+            if (question.Resolved)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            return View(question);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult AnswerQuestion(int id, string body)
+        {
+            Question question = db.Questions.Find(id);
+            if (question == null)
+                return HttpNotFound();
+
+            if (question.Resolved)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            if (string.IsNullOrEmpty(body))
+            {
+                ViewBag.EmptyAnswerError = true;
+                return View(question);
+            }
+
+            ApplicationUser user = db.Users.Find(User.Identity.GetUserId());
+            if (user == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Answer newAnswer = new Answer
+            {
+                ApplicationUser = user,
+                Body = body,
+                Date = DateTime.Now,
+                Question = question,
+                CorrectAnswer = false,
+                VoteTotal = 0,
+            };
+            db.Answers.Add(newAnswer);
+            db.SaveChanges();
+            
+            return RedirectToAction("ViewQuestion", new { id });
         }
     }
 }

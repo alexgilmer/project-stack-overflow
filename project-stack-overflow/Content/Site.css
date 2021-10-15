@@ -42,7 +42,7 @@ label.tag-label {
     margin-bottom: 15px;
 }
 
-.question-body {
+textarea.post-body {
     width: 100%;
     height: 15rem;
     resize: none;
@@ -70,4 +70,8 @@ a.question-tag-list {
 
 a.question-tag-list:hover {
     background-color: rgba(0, 0, 0, 0.3);
+}
+
+div.answer-div {
+    border: 1px solid black;
 }

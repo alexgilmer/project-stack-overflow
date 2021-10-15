@@ -17,10 +17,10 @@
 	if (ViewBag.BodyError == true)
 	{
 		<div class="alert alert-danger" role="alert">
-			There seems to be somethign wrong with the body of your post.  Please try again.
+			There seems to be something wrong with the body of your post.  Please try again.
 		</div>
 	}
-	<textarea class="question-body" placeholder="Put your question here!" name="body">@ViewBag.PostedBody</textarea>
+	<textarea class="post-body" placeholder="Put your question here!" name="body">@ViewBag.PostedBody</textarea>
 	<br />
 	<p>Tag your question, to make it easier for people to see it!</p>
 	if (ViewBag.TagList != null)

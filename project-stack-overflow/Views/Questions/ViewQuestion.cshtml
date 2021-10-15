@@ -8,46 +8,54 @@
 
 @if (Model != null)
 {
-    <main>
-        <section class="view-question-username">
-			<h4>Posted by: @Model.ApplicationUser.UserName</h4>
-        </section>
-        <section class="view-question-title">
-            <h4>@Model.Title</h4>
-        </section>
-        <section class="view-question-body">
-            <p>@Model.Body</p>
-        </section>
-        <section class="view-question-comments">
-            @foreach (var comment in Model.Comments)
-			{
-                <div class="question-comment-div">
-                    <p>@comment.ApplicationUser.UserName on @comment.Date said:</p>
-                    <p>@comment.Body</p>
-                </div>
-			}
-        </section>
-        <section class="view-question-answers">
-            @foreach (var answer in Model.Answers)
-			{
-                <div class="answer-div">
-                    <p>@answer.ApplicationUser answered on @answer.Date:</p>
-                    <p>@answer.Body</p>
-                    <div class="answer-comment-container-div">
-                        @foreach (var comment in answer.Comments)
-						{
-                            <div class="answer-comment-div">
-                                <p>@comment.ApplicationUser.UserName on @comment.Date said:</p>
-                                <p>@comment.Body</p>
-                            </div>
-						}
-                    </div>
-                </div>
-			}
-        </section>
-        @if (ViewBag.UserIsAdmin == true)
+<main>
+	<section class="view-question-username">
+		<h4>Posted by: @Model.ApplicationUser.UserName</h4>
+	</section>
+	<section class="view-question-title">
+		<h4>@Model.Title</h4>
+	</section>
+	<section class="view-question-body">
+		<p>@Model.Body</p>
+	</section>
+	<section class="view-question-comments">
+		@foreach (var comment in Model.Comments)
 		{
-            @Html.ActionLink("Delete this Question", "DeleteQuestion", new { id = Model.Id })
+			<div class="question-comment-div">
+				<p>@comment.ApplicationUser.UserName on @comment.Date said:</p>
+				<p>@comment.Body</p>
+			</div>
 		}
-    </main>
+	</section>
+	<section class="view-question-answers">
+		@foreach (var answer in Model.Answers)
+		{
+			<div class="answer-div">
+				<p>@answer.ApplicationUser.UserName answered on @answer.Date:</p>
+				<p>@answer.Body</p>
+				<div class="answer-comment-container-div">
+					@foreach (var comment in answer.Comments)
+					{
+						<div class="answer-comment-div">
+							<p>@comment.ApplicationUser.UserName on @comment.Date said:</p>
+							<p>@comment.Body</p>
+						</div>
+					}
+				</div>
+			</div>
+		}
+	</section>
+	@if (ViewBag.UserMayAnswer == true)
+	{
+		<p>
+			@Html.ActionLink("Answer this Question", "AnswerQuestion", new { id = Model.Id })
+		</p>
+	}
+	@if (ViewBag.UserIsAdmin == true)
+	{
+		<p>
+			@Html.ActionLink("Delete this Question", "DeleteQuestion", new { id = Model.Id })
+		</p>
+	}
+</main>
 }

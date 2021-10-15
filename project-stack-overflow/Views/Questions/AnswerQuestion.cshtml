@@ -1,0 +1,32 @@
+﻿@model project_stack_overflow.Models.Question
+
+@{
+	ViewBag.Title = "AnswerQuestion";
+}
+
+<main>
+	<h2>Provide an answer to the question here:</h2>
+	<section class="view-question-username">
+		<h4>Posted by: @Model.ApplicationUser.UserName</h4>
+	</section>
+	<section class="view-question-title">
+		<h4>@Model.Title</h4>
+	</section>
+	<section class="view-question-body">
+		<p>@Model.Body</p>
+	</section>
+
+	<h2>Your answer:</h2>
+	@if (ViewBag.EmptyAnswerError == true)
+	{
+		<div class="alert alert-danger" role="alert">
+			You are not allowed to submit empty answers.  Please try again.
+		</div>
+	}
+	@using (Html.BeginForm())
+	{
+		<textarea class="post-body" placeholder="Put your answer here!" name="body"></textarea>
+		<input type="submit" value="Submit" />
+	}
+
+</main>

@@ -283,6 +283,7 @@
     <Content Include="Views\Questions\ViewQuestion.cshtml" />
     <Content Include="Views\Questions\TagSearch.cshtml" />
     <Content Include="Views\Questions\DeleteQuestion.cshtml" />
+    <Content Include="Views\Questions\AnswerQuestion.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
