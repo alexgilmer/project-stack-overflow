@@ -69,25 +69,44 @@
 	<section class="view-question-answers">
 		@foreach (var answer in Model.Answers)
 		{
-			<div class="answer-div">
-				<p>@answer.ApplicationUser.UserName answered on @answer.Date:</p>
-				<p>@answer.Body</p>
-				@Html.ActionLink("Comment on this Answer", "CommentOnAnswer", new { id = answer.Id })
-			</div>
+			if (answer.CorrectAnswer)
+			{
+				<div class="answer-div-correct">
+					<p>@answer.ApplicationUser.UserName answered on @answer.Date:</p>
+					<p>@answer.Body</p>
+					@Html.ActionLink("Comment on this Answer", "CommentOnAnswer", new { id = answer.Id })
+					@if (ViewBag.SolutionMarkable == true)
+					{
+						@Html.ActionLink("Mark this solution as correct", "MarkSolution", new { id = answer.Id })
+					}
+				</div>
+			}
+			else
+			{
+				<div class="answer-div">
+					<p>@answer.ApplicationUser.UserName answered on @answer.Date:</p>
+					<p>@answer.Body</p>
+					@Html.ActionLink("Comment on this Answer", "CommentOnAnswer", new { id = answer.Id })
+					@if (ViewBag.SolutionMarkable == true)
+					{
+						@Html.ActionLink("Mark this solution as correct", "MarkSolution", new { id = answer.Id })
+					}
+				</div>
+			}
 			<div class="answer-comment-container-div">
 				@foreach (var comment in answer.Comments)
 				{
-				<div class="answer-comment-div">
-					<p>@comment.ApplicationUser.UserName on @comment.Date said:</p>
-					<p>@comment.Body</p>
-					@if (ViewBag.UserIsAdmin == true)
-					{
-						@Html.ActionLink("Edit this Comment", "Edit", "CommentAnswers", new { id = comment.Id }, null)
-						<br />
-						@Html.ActionLink("Delete this Comment", "Delete", "CommentAnswers", new { id = comment.Id }, null)
-					}
+					<div class="answer-comment-div">
+						<p>@comment.ApplicationUser.UserName on @comment.Date said:</p>
+						<p>@comment.Body</p>
+						@if (ViewBag.UserIsAdmin == true)
+						{
+							@Html.ActionLink("Edit this Comment", "Edit", "CommentAnswers", new { id = comment.Id }, null)
+							<br />
+							@Html.ActionLink("Delete this Comment", "Delete", "CommentAnswers", new { id = comment.Id }, null)
+						}
 
-				</div>
+					</div>
 				}
 			</div>
 		}

@@ -73,7 +73,11 @@ a.question-tag-list:hover {
 }
 
 div.answer-div {
-    border: 1px solid black;
+    border: 2px solid black;
+}
+
+div.answer-div-correct {
+    border: 2px solid green;
 }
 
 .question-comment-div,

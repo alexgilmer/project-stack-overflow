@@ -201,6 +201,9 @@ namespace project_stack_overflow.Controllers
             if (User.Identity.IsAuthenticated && !question.Resolved)
                 ViewBag.UserMayAnswer = true;
 
+            if (User.Identity.GetUserId() == question.ApplicationUserId && !question.Resolved)
+                ViewBag.SolutionMarkable = true;
+
             return View(question);
         }
 
@@ -383,6 +386,26 @@ namespace project_stack_overflow.Controllers
                 Answer = answer,
             };
             db.CommentAnswers.Add(ca);
+            db.SaveChanges();
+            return RedirectToAction("ViewQuestion", new { id = answer.QuestionId });
+        }
+
+        [Authorize]
+        public ActionResult MarkSolution(int? id)
+        {
+            if (id == null)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            Answer answer = db.Answers.Find(id);
+            if (answer == null)
+                return HttpNotFound();
+
+            //check if the question is already answered
+            if (answer.Question.Resolved)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            answer.CorrectAnswer = true;
+            answer.Question.Resolved = true;
             db.SaveChanges();
             return RedirectToAction("ViewQuestion", new { id = answer.QuestionId });
         }
