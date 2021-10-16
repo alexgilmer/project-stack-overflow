@@ -77,10 +77,17 @@
 			<div class="answer-comment-container-div">
 				@foreach (var comment in answer.Comments)
 				{
-					<div class="answer-comment-div">
-						<p>@comment.ApplicationUser.UserName on @comment.Date said:</p>
-						<p>@comment.Body</p>
-					</div>
+				<div class="answer-comment-div">
+					<p>@comment.ApplicationUser.UserName on @comment.Date said:</p>
+					<p>@comment.Body</p>
+					@if (ViewBag.UserIsAdmin == true)
+					{
+						@Html.ActionLink("Edit this Comment", "Edit", "CommentAnswers", new { id = comment.Id }, null)
+						<br />
+						@Html.ActionLink("Delete this Comment", "Delete", "CommentAnswers", new { id = comment.Id }, null)
+					}
+
+				</div>
 				}
 			</div>
 		}
