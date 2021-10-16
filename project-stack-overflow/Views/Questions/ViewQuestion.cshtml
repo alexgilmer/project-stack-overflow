@@ -1,115 +1,136 @@
 ﻿@model project_stack_overflow.Models.Question
 
 @{
-    ViewBag.Title = "ViewQuestion";
+	ViewBag.Title = "ViewQuestion";
 }
 
 <h2>Viewing Question</h2>
 
 @if (Model != null)
 {
-<main>
-	<section class="view-question-username">
-		<h4>Posted by: @Model.ApplicationUser.UserName</h4>
-	</section>
-	<section class="view-question-title">
-		<h4>@Model.Title</h4>
-	</section>
-	<section class="view-question-body">
-		<p>@Model.Body</p>
-	</section>
-	<section class="view-question-tags">
-		<p>
-			Tags:
-			@if (Model.QuestionTags.Count == 0)
-			{
-				<span>None</span>
-			}
-			else
-			{
-				foreach (var qt in Model.QuestionTags)
-				{
-					@Html.ActionLink(qt.Tag.Name, "TagSearch", "Questions", new { TagSelect = qt.TagId }, new { @class = "question-tag-list" })
-				}
-			}
-		</p>
-
-	</section>
-	<section class="view-question-comments">
-		@foreach (var comment in Model.Comments)
-		{
-			<div class="question-comment-div">
-				<p>@comment.ApplicationUser.UserName on @comment.Date said:</p>
-				<p>@comment.Body</p>
-				@if (ViewBag.UserIsAdmin == true)
-				{
-					@Html.ActionLink("Edit this Comment", "Edit", "CommentQuestions", new { id = comment.Id }, null)
-					<br />
-					@Html.ActionLink("Delete this Comment", "Delete", "CommentQuestions", new { id = comment.Id }, null)
-				}
-			</div>
-		}
-	</section>
-
-	<section class="view-question-links">
-		<p>
-			@Html.ActionLink("Answer this Question", "AnswerQuestion", new { id = Model.Id })
-		</p>
-		<p>
-			@Html.ActionLink("Comment on this Question", "CommentOnQuestion", new { id = Model.Id })
-		</p>
-		@if (ViewBag.UserIsAdmin == true)
-		{
-		<p>
-			@Html.ActionLink("Delete this Question", "DeleteQuestion", new { id = Model.Id })
-		</p>
-		}
-	</section>
-
-	<section class="view-question-answers">
-		@foreach (var answer in Model.Answers)
-		{
-			if (answer.CorrectAnswer)
-			{
-				<div class="answer-div-correct">
-					<p>@answer.ApplicationUser.UserName answered on @answer.Date:</p>
-					<p>@answer.Body</p>
-					@Html.ActionLink("Comment on this Answer", "CommentOnAnswer", new { id = answer.Id })
-					@if (ViewBag.SolutionMarkable == true)
+	<main>
+		<div class="view-question-container">
+			<section class="view-question-username">
+				<h4>Posted by: @Model.ApplicationUser.UserName</h4>
+			</section>
+			<section class="view-question-title">
+				<h4>@Model.Title</h4>
+			</section>
+			<section class="view-question-body">
+				<p>@Model.Body</p>
+			</section>
+			<section class="view-question-tags">
+				<p>
+					Tags:
+					@if (Model.QuestionTags.Count == 0)
 					{
-						@Html.ActionLink("Mark this solution as correct", "MarkSolution", new { id = answer.Id })
+						<span>None</span>
+					}
+					else
+					{
+						foreach (var qt in Model.QuestionTags)
+						{
+							@Html.ActionLink(qt.Tag.Name, "TagSearch", "Questions", new { TagSelect = qt.TagId }, new { @class = "question-tag-list" })
+						}
+					}
+				</p>
+			</section>
+		</div>
+		<section class="view-question-comments">
+			@foreach (var comment in Model.Comments)
+			{
+				<div class="question-comment-div">
+					<p>@comment.ApplicationUser.UserName on @comment.Date said:</p>
+					<p>@comment.Body</p>
+					@if (ViewBag.UserIsAdmin == true)
+					{
+						@Html.ActionLink("Edit this Comment", "Edit", "CommentQuestions", new { id = comment.Id }, null)
+						<br />
+						@Html.ActionLink("Delete this Comment", "Delete", "CommentQuestions", new { id = comment.Id }, null)
 					}
 				</div>
 			}
-			else
+		</section>
+
+		<section class="view-question-links">
+			<p>
+				@Html.ActionLink("Answer this Question", "AnswerQuestion", new { id = Model.Id })
+			</p>
+			<p>
+				@Html.ActionLink("Comment on this Question", "CommentOnQuestion", new { id = Model.Id })
+			</p>
+			@if (ViewBag.UserIsAdmin == true)
 			{
-				<div class="answer-div">
-					<p>@answer.ApplicationUser.UserName answered on @answer.Date:</p>
-					<p>@answer.Body</p>
-					@Html.ActionLink("Comment on this Answer", "CommentOnAnswer", new { id = answer.Id })
-					@if (ViewBag.SolutionMarkable == true)
-					{
-						@Html.ActionLink("Mark this solution as correct", "MarkSolution", new { id = answer.Id })
-					}
-				</div>
+				<p>
+					@Html.ActionLink("Delete this Question", "DeleteQuestion", new { id = Model.Id })
+				</p>
 			}
-			<div class="answer-comment-container-div">
-				@foreach (var comment in answer.Comments)
+		</section>
+
+		<section class="view-question-answers">
+			@foreach (var answer in Model.Answers)
+			{
+				if (answer.CorrectAnswer)
 				{
-					<div class="answer-comment-div">
-						<p>@comment.ApplicationUser.UserName on @comment.Date said:</p>
-						<p>@comment.Body</p>
+					<div class="answer-div-correct">
+						<p>@answer.ApplicationUser.UserName answered on @answer.Date:</p>
+						<p>@answer.Body</p>
+						<p>
+							@Html.ActionLink("Comment on this Answer", "CommentOnAnswer", new { id = answer.Id })
+						</p>
+						@if (ViewBag.SolutionMarkable == true)
+						{
+							<p>
+								@Html.ActionLink("Mark this solution as correct", "MarkSolution", new { id = answer.Id })
+							</p>
+						}
 						@if (ViewBag.UserIsAdmin == true)
 						{
-							@Html.ActionLink("Edit this Comment", "Edit", "CommentAnswers", new { id = comment.Id }, null)
-							<br />
-							@Html.ActionLink("Delete this Comment", "Delete", "CommentAnswers", new { id = comment.Id }, null)
+							<p>
+								@Html.ActionLink("Delete this Answer", "DeleteAnswer", new { id = answer.Id })
+							</p>
 						}
-
 					</div>
 				}
-			</div>
-		}
-	</section>
-</main>
+				else
+				{
+					<div class="answer-div">
+						<p>@answer.ApplicationUser.UserName answered on @answer.Date:</p>
+						<p>@answer.Body</p>
+						<p>
+							@Html.ActionLink("Comment on this Answer", "CommentOnAnswer", new { id = answer.Id })
+						</p>
+						@if (ViewBag.SolutionMarkable == true)
+						{
+							<p>
+								@Html.ActionLink("Mark this solution as correct", "MarkSolution", new { id = answer.Id })
+							</p>
+						}
+						@if (ViewBag.UserIsAdmin == true)
+						{
+							<p>
+								@Html.ActionLink("Delete this Answer", "DeleteAnswer", new { id = answer.Id })
+							</p>
+						}
+					</div>
+				}
+				<div class="answer-comment-container-div">
+					@foreach (var comment in answer.Comments)
+					{
+						<div class="answer-comment-div">
+							<p>@comment.ApplicationUser.UserName on @comment.Date said:</p>
+							<p>@comment.Body</p>
+							@if (ViewBag.UserIsAdmin == true)
+							{
+								@Html.ActionLink("Edit this Comment", "Edit", "CommentAnswers", new { id = comment.Id }, null)
+								<br />
+								@Html.ActionLink("Delete this Comment", "Delete", "CommentAnswers", new { id = comment.Id }, null)
+							}
+
+						</div>
+					}
+				</div>
+			}
+		</section>
+	</main>
 }

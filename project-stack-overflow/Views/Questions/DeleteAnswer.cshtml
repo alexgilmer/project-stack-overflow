@@ -1,0 +1,24 @@
+﻿@model project_stack_overflow.Models.Answer
+
+@{
+	ViewBag.Title = "DeleteAnswer";
+}
+
+<h2>Are you sure you want to delete this answer?</h2>
+
+<div class="answer-div">
+	<p>@Model.ApplicationUser.UserName answered on @Model.Date:</p>
+	<p>@Model.Body</p>
+</div>
+
+@using (Html.BeginForm())
+{
+	<div>
+		<input type="submit" value="Confirmed" />
+	</div>
+}
+
+<p>
+	@Html.ActionLink("Take me back to the question", "ViewQuestion", new { id = Model.QuestionId })
+</p>
+

@@ -292,6 +292,7 @@
     <Content Include="Views\CommentQuestions\Edit.cshtml" />
     <Content Include="Views\CommentAnswers\Delete.cshtml" />
     <Content Include="Views\CommentAnswers\Edit.cshtml" />
+    <Content Include="Views\Questions\DeleteAnswer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

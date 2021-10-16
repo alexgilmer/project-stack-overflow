@@ -410,5 +410,36 @@ namespace project_stack_overflow.Controllers
             return RedirectToAction("ViewQuestion", new { id = answer.QuestionId });
         }
 
+        [Authorize(Roles = "Admin")]
+        public ActionResult DeleteAnswer(int? id)
+        {
+            if (id == null)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            Answer answer = db.Answers.Find(id);
+            if (answer == null)
+                return HttpNotFound();
+
+            return View(answer);
+        }
+        
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [ActionName("DeleteAnswer")]
+        public ActionResult DeleteAnswerConfirmed(int id)
+        {
+            Answer answer = db.Answers.Find(id);
+            if (answer == null)
+                return HttpNotFound();
+
+            int redirectId = answer.QuestionId;
+            if (answer.CorrectAnswer)
+                answer.Question.Resolved = false;
+
+            db.Answers.Remove(answer);
+            db.SaveChanges();
+
+            return RedirectToAction("ViewQuestion", new { id = redirectId });
+        }
     }
 }
