@@ -10,7 +10,33 @@
 		You tried to skip to a page that doesn't exist.  We've taken you to the last page, instead!
 	</div>
 }
-<h2>You are currently view page @ViewBag.CurrentPage of our results, at @ViewBag.ResultsPerPage results per page.</h2>
+<h2>
+	You are currently view page @ViewBag.CurrentPage of @ViewBag.FilterResolution questions.
+</h2>
+<h2>
+	@ViewBag.ResultsPerPage results per page.
+</h2>
+<h2>
+	Sorted by @ViewBag.SelectedSort
+</h2>
+
+@using (Html.BeginForm())
+{
+	<div>
+		Choose a sort method:
+		<select name="SortSelect">
+			<option value="date">Most recent first</option>
+			<option value="answers">Most answers first</option>
+		</select>
+		<br />
+		<select name="ResolvedSelect">
+			<option value="all">Show all questions</option>
+			<option value="onlyResolved">Show only resolved questions</option>
+			<option value="onlyUnresolved">Show only unresolved questions</option>
+		</select>
+		<input type="submit" value="Search" />
+	</div>
+}
 
 @if (Model != null && Model.Count > 0)
 {
@@ -44,7 +70,7 @@
 					{
 						foreach (var qt in question.QuestionTags)
 						{
-							@Html.ActionLink(qt.Tag.Name, "TagSearch", "Questions", new { TagSelect = qt.TagId }, new { @class="question-tag-list" })
+							@Html.ActionLink(qt.Tag.Name, "TagSearch", "Questions", new { TagSelect = qt.TagId }, new { @class = "question-tag-list" })
 						}
 					}
 				</p>

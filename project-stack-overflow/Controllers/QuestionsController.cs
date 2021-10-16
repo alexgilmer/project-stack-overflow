@@ -14,7 +14,7 @@ namespace project_stack_overflow.Controllers
         ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Questions
-        public ActionResult Index(int? pageNumber)
+        public ActionResult Index(int? pageNumber, string SortSelect, string ResolvedSelect)
         {
             //For now, pagination is hard-coded to 10 per page. 
             int resultsPerPage = 10;
@@ -23,23 +23,57 @@ namespace project_stack_overflow.Controllers
             if (pageNumber != null)
                 skippedPages = (int)pageNumber - 1;
 
-            //check to make sure our skippedPages takes us to a valid page
-            //if invalid, take us to last page instead. 
-            if (db.Questions.Count() <= resultsPerPage * skippedPages)
+            List<Question> filteredList;
+
+            if (ResolvedSelect == "onlyResolved")
             {
-                ViewBag.SkippedTooMany = true;
-                skippedPages = (db.Questions.Count() - 1) / resultsPerPage;
+                filteredList = db.Questions.Where(q => q.Resolved).ToList();
+                ViewBag.FilterResolution = "resolved";
+            }
+            else if (ResolvedSelect == "onlyUnresolved")
+            {
+                filteredList = db.Questions.Where(q => !q.Resolved).ToList();
+                ViewBag.FilterResolution = "unresolved";
+            }
+            else
+            {
+                filteredList = db.Questions.ToList();
+                ViewBag.FilterResolution = "all";
             }
 
-            var paginatedQuestions = db.Questions
-                .OrderByDescending(q => q.Date)
-                .Skip(resultsPerPage * skippedPages)
-                .Take(resultsPerPage)
-                .ToList();
+            //check to make sure our skippedPages takes us to a valid page
+            //if invalid, take us to last page instead. 
+            if (filteredList.Count() <= resultsPerPage * skippedPages)
+            {
+                ViewBag.SkippedTooMany = true;
+                skippedPages = (filteredList.Count() - 1) / resultsPerPage;
+            }
+
+            List<Question> paginatedQuestions;
+
+            if (SortSelect == "answers")
+            {
+                ViewBag.SelectedSort = "number of answers";
+                paginatedQuestions = filteredList
+                    .OrderByDescending(q => q.Answers.Count)
+                    .Skip(resultsPerPage * skippedPages)
+                    .Take(resultsPerPage)
+                    .ToList();
+            }
+            else
+            {
+                // this is the default search, so null should land here
+                ViewBag.SelectedSort = "most recent";
+                paginatedQuestions = filteredList
+                    .OrderByDescending(q => q.Date)
+                    .Skip(resultsPerPage * skippedPages)
+                    .Take(resultsPerPage)
+                    .ToList();
+            }
 
             ViewBag.CurrentPage = skippedPages + 1;
             ViewBag.ResultsPerPage = resultsPerPage;
-            ViewBag.MaxPages = (int)Math.Ceiling((double)db.Questions.Count() / resultsPerPage);
+            ViewBag.MaxPages = (int)Math.Ceiling((double)filteredList.Count() / resultsPerPage);
             return View(paginatedQuestions);
         }
 
