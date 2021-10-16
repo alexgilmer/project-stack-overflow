@@ -85,3 +85,18 @@ div.answer-div-correct {
 .answer-comment-div {
     border: 1px dashed orange;
 }
+
+.index-nav-page-link {
+    display: inline-block;
+    margin: 4px;
+    padding-left: 1px;
+    padding-right: 1px;
+    border: 1px solid blue;
+    color: blue;
+    text-decoration: none;
+}
+
+.index-nav-page-link:hover {
+    color: darkblue;
+    background-color: yellow;
+}

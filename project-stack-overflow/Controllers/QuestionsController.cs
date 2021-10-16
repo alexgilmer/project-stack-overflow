@@ -71,6 +71,9 @@ namespace project_stack_overflow.Controllers
                     .ToList();
             }
 
+            ViewBag.SortSelect = SortSelect ?? "date";
+            ViewBag.ResolvedSelect = ResolvedSelect ?? "all";
+
             ViewBag.CurrentPage = skippedPages + 1;
             ViewBag.ResultsPerPage = resultsPerPage;
             ViewBag.MaxPages = (int)Math.Ceiling((double)filteredList.Count() / resultsPerPage);

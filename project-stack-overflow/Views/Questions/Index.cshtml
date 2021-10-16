@@ -11,7 +11,7 @@
 	</div>
 }
 <h2>
-	You are currently view page @ViewBag.CurrentPage of @ViewBag.FilterResolution questions.
+	You are currently view page @ViewBag.CurrentPage of @ViewBag.MaxPages, from @ViewBag.FilterResolution questions.
 </h2>
 <h2>
 	@ViewBag.ResultsPerPage results per page.
@@ -25,17 +25,59 @@
 	<div>
 		Choose a sort method:
 		<select name="SortSelect">
-			<option value="date">Most recent first</option>
-			<option value="answers">Most answers first</option>
+			@if (ViewBag.SortSelect == "date")
+			{
+				<option value="date" selected>Most recent first</option>
+				<option value="answers">Most answers first</option>
+			}
+			else
+			{
+				<option value="date">Most recent first</option>
+				<option value="answers" selected>Most answers first</option>
+			}
 		</select>
 		<br />
 		<select name="ResolvedSelect">
-			<option value="all">Show all questions</option>
-			<option value="onlyResolved">Show only resolved questions</option>
-			<option value="onlyUnresolved">Show only unresolved questions</option>
+			@if (ViewBag.ResolvedSelect == "onlyResolved")
+			{
+				<option value="all">Show all questions</option>
+				<option value="onlyResolved" selected>Show only resolved questions</option>
+				<option value="onlyUnresolved">Show only unresolved questions</option>
+			}
+			else if (ViewBag.ResolvedSelect == "onlyUnresolved")
+			{
+				<option value="all">Show all questions</option>
+				<option value="onlyResolved">Show only resolved questions</option>
+				<option value="onlyUnresolved" selected>Show only unresolved questions</option>
+			}
+			else
+			{
+				<option value="all" selected>Show all questions</option>
+				<option value="onlyResolved">Show only resolved questions</option>
+				<option value="onlyUnresolved">Show only unresolved questions</option>
+			}
+
 		</select>
 		<input type="submit" value="Search" />
 	</div>
+}
+
+@if (ViewBag.MaxPages > 1)
+{
+	<nav>
+		@for (int i = 1; i <= ViewBag.MaxPages; i++)
+		{
+			<span class="index-nav-page-link">
+				@Html.ActionLink(i.ToString(), "Index",
+				new
+				{
+				SortSelect = ViewBag.SortSelect,
+				ResolvedSelect = ViewBag.ResolvedSelect,
+				pageNumber = i
+				})
+			</span>
+		}
+	</nav>
 }
 
 @if (Model != null && Model.Count > 0)
