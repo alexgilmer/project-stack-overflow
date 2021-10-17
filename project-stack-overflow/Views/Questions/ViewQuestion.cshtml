@@ -33,7 +33,11 @@
 							@Html.ActionLink(qt.Tag.Name, "TagSearch", "Questions", new { TagSelect = qt.TagId }, new { @class = "question-tag-list" })
 						}
 					}
-				</p>
+					@if (ViewBag.UserIsAdmin == true)
+					{
+						@Html.ActionLink("Edit the tags on this question", "EditQuestionTags", "Tags", new { id = Model.Id }, new { @class = "question-tag-list" })
+					}
+					</p>
 			</section>
 		</div>
 		<section class="view-question-comments">

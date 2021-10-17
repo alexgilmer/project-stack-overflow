@@ -127,6 +127,58 @@ namespace project_stack_overflow.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult EditQuestionTags(int? id)
+        {
+            if (id == null)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            Question question = db.Questions.Find(id);
+
+            if (question == null)
+                return HttpNotFound();
+
+            var removableTags = question.QuestionTags.Select(qt => qt.Tag).ToHashSet();
+            var fullTagList = db.Tags.ToHashSet();
+
+            var addableTags = fullTagList.Where(t => !removableTags.Contains(t)).OrderBy(t => t.Name).ToList();
+
+            var vm = new TagEditViewModel();
+            vm.Question = question;
+            vm.CurrentTags = question.QuestionTags.OrderBy(qt => qt.Tag.Name).ToList();
+            vm.AddableTags = addableTags;
+            
+            return View(vm);
+        }
+
+        public ActionResult RemoveTag(int id, int qtId)
+        {
+            QuestionTag tagToRemove = db.QuestionTags.Find(qtId);
+            if (tagToRemove == null)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            db.QuestionTags.Remove(tagToRemove);
+            db.SaveChanges();
+
+            return RedirectToAction("EditQuestionTags", new { id });
+        }
+
+        public ActionResult AddTag(int id, int tId)
+        {
+            Tag tag = db.Tags.Find(tId);
+            if (tag == null)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            QuestionTag tagToAdd = new QuestionTag
+            {
+                QuestionId = id,
+                TagId = tId
+            };
+            db.QuestionTags.Add(tagToAdd);
+            db.SaveChanges();
+
+            return RedirectToAction("EditQuestionTags", new { id });
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

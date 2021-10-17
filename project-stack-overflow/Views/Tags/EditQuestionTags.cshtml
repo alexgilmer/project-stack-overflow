@@ -1,0 +1,50 @@
+﻿@model project_stack_overflow.Models.TagEditViewModel
+
+@{
+	ViewBag.Title = "Edit Question Tags";
+}
+
+<h2>Edit question tags</h2>
+
+
+<div class="view-question-container">
+	<section class="view-question-username">
+		<h4>Posted by: @Model.Question.ApplicationUser.UserName</h4>
+	</section>
+	<section class="view-question-title">
+		<h4>@Model.Question.Title</h4>
+	</section>
+	<section class="view-question-body">
+		<p>@Model.Question.Body</p>
+	</section>
+	<section class="view-question-tags">
+		<p>
+			Current Tags:
+			@if (Model.CurrentTags.Count == 0)
+			{
+				<span>None</span>
+			}
+			else
+			{
+				foreach (var qt in Model.CurrentTags)
+				{
+					@Html.ActionLink(qt.Tag.Name, "RemoveTag", "Tags", new { id = Model.Question.Id, qtId = qt.Id }, new { @class = "question-tag-list" })
+				}
+			}
+		</p>
+		<p>
+			Missing Tags:
+			@if (Model.AddableTags.Count == 0)
+			{
+				<span>None</span>
+			}
+			else
+			{
+				foreach (var tag in Model.AddableTags)
+				{
+					@Html.ActionLink(tag.Name, "AddTag", "Tags", new { id = Model.Question.Id, tId = tag.Id }, new { @class = "question-tag-list" })
+				}
+			}
+		</p>
+	</section>
+</div>
