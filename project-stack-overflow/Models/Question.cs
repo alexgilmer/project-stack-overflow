@@ -16,15 +16,15 @@ namespace project_stack_overflow.Models
         public int VoteTotal { get; set; }
         public virtual ICollection<Answer> Answers { get; set; }
         public virtual ICollection<QuestionTag> QuestionTags { get; set; }
-        public virtual ICollection<CommentQuestion> Comments { get; set; }
+        public virtual ICollection<CommentQuestion> CommentQuestions { get; set; }
+        public virtual ICollection<UserVote> UserVotes { get; set; }
         public bool Resolved { get; set; }
-
 
         public Question()
         {
             this.Answers = new HashSet<Answer>();
             this.QuestionTags = new HashSet<QuestionTag>();
-            this.Comments = new HashSet<CommentQuestion>();
+            this.CommentQuestions = new HashSet<CommentQuestion>();
         }
 
     }

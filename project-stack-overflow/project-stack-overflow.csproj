@@ -203,6 +203,10 @@
     <Compile Include="Migrations\202110112136420_ResolveQuestions.Designer.cs">
       <DependentUpon>202110112136420_ResolveQuestions.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202110172145174_AddVotes.cs" />
+    <Compile Include="Migrations\202110172145174_AddVotes.Designer.cs">
+      <DependentUpon>202110172145174_AddVotes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Answer.cs" />
@@ -215,6 +219,7 @@
     <Compile Include="Models\QuestionTag.cs" />
     <Compile Include="Models\Tag.cs" />
     <Compile Include="Models\TagEditViewModel.cs" />
+    <Compile Include="Models\UserVote.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -330,6 +335,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202110112136420_ResolveQuestions.resx">
       <DependentUpon>202110112136420_ResolveQuestions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202110172145174_AddVotes.resx">
+      <DependentUpon>202110172145174_AddVotes.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

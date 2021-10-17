@@ -320,7 +320,7 @@ namespace project_stack_overflow.Migrations
                     ApplicationUserId = "8ead4c6e-c2c3-4d5f-b2ff-6f59018f0858",
                     Date = DateTime.Parse("2021-10-16 16:04:39.087"),
                     VoteTotal = 0,
-                    Resolved = false
+                    Resolved = true
                 };
                 qList.Add(q13);
 
@@ -337,6 +337,185 @@ namespace project_stack_overflow.Migrations
                 qList.Add(q14);
 
                 context.Questions.AddOrUpdate(q => q.Title, qList.ToArray());
+            }
+
+            //Answers
+            {
+                Answer a1 = new Answer
+                {
+                    QuestionId = 13,
+                    ApplicationUserId = "ba194914-4cfa-4e0a-918e-8faf6f0d5a31",
+                    Date = DateTime.Parse("2021-10-17 15:58:50.277"),
+                    VoteTotal = 0,
+                    Body = "I'm that friend.  IT REALLY IS. ",
+                    CorrectAnswer = false
+                };
+                context.Answers.AddOrUpdate(a => a.Date, a1);
+
+                Answer a2 = new Answer
+                {
+                    QuestionId = 13,
+                    ApplicationUserId = "b6ce8157-818d-438c-aeab-ba4b280ac7c4",
+                    Date = DateTime.Parse("2021-10-17 16:00:32.987"),
+                    VoteTotal = 0,
+                    Body = "It is not.  It's an efficient way of querying databases.  Study up!",
+                    CorrectAnswer = true
+                };
+                context.Answers.AddOrUpdate(a => a.Date, a2);
+            }
+
+            //CommentQuestions
+            {
+                CommentQuestion cq1 = new CommentQuestion
+                {
+                    ApplicationUserId = "ba194914-4cfa-4e0a-918e-8faf6f0d5a31",
+                    QuestionId = 10,
+                    Body = "Hello, future you!  GET BACK TO WORK!",
+                    Date = DateTime.Parse("2021-10-17 15:59:10.420")
+                };
+                context.CommentQuestions.AddOrUpdate(cq => cq.Body, cq1);
+
+                CommentQuestion cq2 = new CommentQuestion
+                {
+                    ApplicationUserId = "b6ce8157-818d-438c-aeab-ba4b280ac7c4",
+                    QuestionId = 13,
+                    Body = "(Needs Citation) lmao",
+                    Date = DateTime.Parse("2021-10-17 16:00:06.053")
+                };
+                context.CommentQuestions.AddOrUpdate(cq => cq.Body, cq2);
+            }
+
+            //CommentAnswers
+            {
+                CommentAnswer ca1 = new CommentAnswer
+                {
+                    ApplicationUserId = "b6ce8157-818d-438c-aeab-ba4b280ac7c4",
+                    AnswerId = 1,
+                    Body = "Is it, though?  I'm not convinced by your logic.  ",
+                    Date = DateTime.Parse("2021-10-17 15:59:49.287")
+                };
+                context.CommentAnswers.AddOrUpdate(ca => ca.Body, ca1);
+            }
+
+            //QuestionTags
+            {
+                List<QuestionTag> qtList = new List<QuestionTag>();
+
+                qtList.Add(new QuestionTag
+                {
+                    TagId = 11,
+                    QuestionId = 14
+                });
+
+                qtList.Add(new QuestionTag
+                {
+                    TagId = 10,
+                    QuestionId = 13
+                });
+
+                qtList.Add(new QuestionTag
+                {
+                    TagId = 9,
+                    QuestionId = 12
+                });
+
+                qtList.Add(new QuestionTag
+                {
+                    TagId = 8,
+                    QuestionId = 11
+                });
+
+                qtList.Add(new QuestionTag
+                {
+                    TagId = 7,
+                    QuestionId = 10
+                });
+
+                qtList.Add(new QuestionTag
+                {
+                    TagId = 6,
+                    QuestionId =9
+                });
+
+                qtList.Add(new QuestionTag
+                {
+                    TagId = 5,
+                    QuestionId =9
+                });
+
+                qtList.Add(new QuestionTag
+                {
+                    TagId = 5,
+                    QuestionId = 8
+                });
+
+                qtList.Add(new QuestionTag
+                {
+                    TagId = 4,
+                    QuestionId = 8
+                });
+
+                qtList.Add(new QuestionTag
+                {
+                    TagId = 4,
+                    QuestionId = 7
+                });
+
+                qtList.Add(new QuestionTag
+                {
+                    TagId = 3,
+                    QuestionId = 7
+                });
+
+                qtList.Add(new QuestionTag
+                {
+                    TagId = 3,
+                    QuestionId =6
+                });
+
+                qtList.Add(new QuestionTag
+                {
+                    TagId = 2,
+                    QuestionId = 5
+                });
+
+                qtList.Add(new QuestionTag
+                {
+                    TagId = 1,
+                    QuestionId = 4
+                });
+
+                qtList.Add(new QuestionTag
+                {
+                    TagId = 1,
+                    QuestionId = 3
+                });
+
+                qtList.Add(new QuestionTag
+                {
+                    TagId = 7,
+                    QuestionId = 3
+                });
+
+                qtList.Add(new QuestionTag
+                {
+                    TagId = 10,
+                    QuestionId = 3
+                });
+
+                qtList.Add(new QuestionTag
+                {
+                    TagId = 8,
+                    QuestionId = 2
+                });
+
+                qtList.Add(new QuestionTag
+                {
+                    TagId = 4,
+                    QuestionId = 1
+                });
+
+                context.QuestionTags.AddOrUpdate(qt => new { qt.TagId, qt.QuestionId }, qtList.ToArray());
             }
         }
     }

@@ -15,6 +15,7 @@ namespace project_stack_overflow.Models
         public virtual ICollection<Answer> Answers { get; set; }
         public virtual ICollection<CommentAnswer> CommentAnswers { get; set; }
         public virtual ICollection<CommentQuestion> CommentQuestions { get; set; }
+        public virtual ICollection<UserVote> UserVotes { get; set; }
 
         public ApplicationUser()
         {
@@ -22,6 +23,7 @@ namespace project_stack_overflow.Models
             this.Answers = new HashSet<Answer>();
             this.CommentAnswers = new HashSet<CommentAnswer>();
             this.CommentQuestions = new HashSet<CommentQuestion>();
+            this.UserVotes = new HashSet<UserVote>();
         }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
@@ -35,13 +37,13 @@ namespace project_stack_overflow.Models
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public DbSet<Question> Questions { get; set; }
-        public DbSet<Answer> Answers { get; set; }
-        public DbSet<Tag> Tags { get; set; }
-        public DbSet<QuestionTag> QuestionTags { get; set; }
-        public DbSet<CommentAnswer> CommentAnswers { get; set; }
-        public DbSet<CommentQuestion> CommentQuestions { get; set; }
-
+        public virtual DbSet<Question> Questions { get; set; }
+        public virtual DbSet<Answer> Answers { get; set; }
+        public virtual DbSet<Tag> Tags { get; set; }
+        public virtual DbSet<QuestionTag> QuestionTags { get; set; }
+        public virtual DbSet<CommentAnswer> CommentAnswers { get; set; }
+        public virtual DbSet<CommentQuestion> CommentQuestions { get; set; }
+        public virtual DbSet<UserVote> UserVotes { get; set; }
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
