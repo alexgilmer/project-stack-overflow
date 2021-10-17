@@ -69,5 +69,19 @@ namespace project_stack_overflow.Models
         {
             return userManager.GetRoles(userId).ToList();
         }
+
+        public static bool DoesUserExist(string userId)
+        {
+            return userManager.FindById(userId) != null;
+        }
+
+        public static bool MakeUser(ApplicationUser user)
+        {
+            if (DoesUserExist(user.Id))
+                return false;
+
+            userManager.Create(user);
+            return true;
+        }
     }
 }
