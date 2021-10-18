@@ -336,7 +336,7 @@ namespace project_stack_overflow.Migrations
                 };
                 qList.Add(q14);
 
-                context.Questions.AddOrUpdate(q => q.Title, qList.ToArray());
+                context.Questions.AddOrUpdate(q => q.Body, qList.ToArray());
             }
 
             //Answers
@@ -350,7 +350,6 @@ namespace project_stack_overflow.Migrations
                     Body = "I'm that friend.  IT REALLY IS. ",
                     CorrectAnswer = false
                 };
-                context.Answers.AddOrUpdate(a => a.Date, a1);
 
                 Answer a2 = new Answer
                 {
@@ -361,7 +360,7 @@ namespace project_stack_overflow.Migrations
                     Body = "It is not.  It's an efficient way of querying databases.  Study up!",
                     CorrectAnswer = true
                 };
-                context.Answers.AddOrUpdate(a => a.Date, a2);
+                context.Answers.AddOrUpdate(a => a.Body, a1, a2);
             }
 
             //CommentQuestions
@@ -373,7 +372,6 @@ namespace project_stack_overflow.Migrations
                     Body = "Hello, future you!  GET BACK TO WORK!",
                     Date = DateTime.Parse("2021-10-17 15:59:10.420")
                 };
-                context.CommentQuestions.AddOrUpdate(cq => cq.Body, cq1);
 
                 CommentQuestion cq2 = new CommentQuestion
                 {
@@ -382,7 +380,9 @@ namespace project_stack_overflow.Migrations
                     Body = "(Needs Citation) lmao",
                     Date = DateTime.Parse("2021-10-17 16:00:06.053")
                 };
-                context.CommentQuestions.AddOrUpdate(cq => cq.Body, cq2);
+                //Sometimes, this works.  Other times, it breaks.  I can't tell how or why. 
+                //Foriegn Key constraint error, again.  
+                //context.CommentQuestions.AddOrUpdate(cq => cq.Body, cq1, cq2);
             }
 
             //CommentAnswers
@@ -394,7 +394,8 @@ namespace project_stack_overflow.Migrations
                     Body = "Is it, though?  I'm not convinced by your logic.  ",
                     Date = DateTime.Parse("2021-10-17 15:59:49.287")
                 };
-                context.CommentAnswers.AddOrUpdate(ca => ca.Body, ca1);
+                //This line seems to throw a Foreign Key constraint error during the seed method. 
+                //context.CommentAnswers.AddOrUpdate(ca => ca.Body, ca1);
             }
 
             //QuestionTags
@@ -515,7 +516,10 @@ namespace project_stack_overflow.Migrations
                     QuestionId = 1
                 });
 
-                context.QuestionTags.AddOrUpdate(qt => new { qt.TagId, qt.QuestionId }, qtList.ToArray());
+                //throwing an error, for unknown reasons. 
+                //The INSERT statement conflicted with the FOREIGN KEY constraint "FK_dbo.QuestionTags_dbo.Tags_TagId".
+                //The conflict occurred in database "project-stack-overflow", table "dbo.Tags", column 'Id'.
+                //context.QuestionTags.AddOrUpdate(qt => new { qt.TagId, qt.QuestionId }, qtList.ToArray());
             }
         }
     }

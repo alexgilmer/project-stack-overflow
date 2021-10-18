@@ -198,16 +198,60 @@ namespace project_stack_overflow.Controllers
                 return HttpNotFound();
             }
 
+            ViewQuestionViewModel vm = new ViewQuestionViewModel();
+            vm.Question = question;
+
+
             if (User.IsInRole("Admin"))
-                ViewBag.UserIsAdmin = true;
+                vm.UserIsAdmin = true;
 
             if (User.Identity.IsAuthenticated && !question.Resolved)
-                ViewBag.UserMayAnswer = true;
+                vm.UserMayAnswer = true;
 
             if (User.Identity.GetUserId() == question.ApplicationUserId && !question.Resolved)
-                ViewBag.SolutionMarkable = true;
+                vm.SolutionMarkable = true;
 
-            return View(question);
+            if (User.Identity.IsAuthenticated)
+            {
+                vm.UserId = User.Identity.GetUserId();
+
+                vm.UserIsAuthenticated = true;
+
+                vm.UserQuestionVote = FetchQuestionVote(vm.UserId, question.Id)?.Vote; //a?.b returns null if a==null, otherwise return a.b
+
+                foreach (Answer answer in question.Answers)
+                {
+                    vm.AnswersAndVotes.Add(answer, 
+                        FetchAnswerVote(vm.UserId, answer.Id)?.Vote); //a?.b returns null if a==null, otherwise return a.b
+                }
+            }
+            else
+            {
+                vm.UserIsAuthenticated = false;
+                vm.UserQuestionVote = null;
+                foreach(Answer answer in question.Answers)
+                {
+                    vm.AnswersAndVotes.Add(answer, null);
+                }
+            }
+
+            return View(vm);
+        }
+
+        public UserVote FetchQuestionVote(string userId, int? qId)
+        {
+            return db.UserVotes.FirstOrDefault
+                (vote =>
+                vote.ApplicationUserId == userId
+                && vote.QuestionId == qId);
+        }
+
+        public UserVote FetchAnswerVote(string userId, int? aId)
+        {
+            return db.UserVotes.FirstOrDefault
+                (vote =>
+                vote.ApplicationUserId == userId
+                && vote.AnswerId == aId);
         }
 
         [Authorize(Roles = "Admin")]

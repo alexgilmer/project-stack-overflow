@@ -1,4 +1,4 @@
-﻿@model project_stack_overflow.Models.Question
+﻿@model project_stack_overflow.Models.ViewQuestionViewModel
 
 @{
 	ViewBag.Title = "ViewQuestion";
@@ -11,42 +11,66 @@
 	<main>
 		<div class="view-question-container">
 			<section class="view-question-username">
-				<h4>Posted by: @Model.ApplicationUser.UserName</h4>
+				<h4>Posted by: @Model.Question.ApplicationUser.UserName (@Model.Question.ApplicationUser.Reputation)</h4>
 			</section>
 			<section class="view-question-title">
-				<h4>@Model.Title</h4>
+				<h4>@Model.Question.Title</h4>
 			</section>
+			@if (Model.UserIsAuthenticated)
+			{
+				<section class="view-question-votes">
+					@if (Model.UserQuestionVote == true)
+					{
+						<h6>@Html.ActionLink("Un-Upvote", "CastUpVote", "Votes", new { qId = Model.Question.Id, userId = Model.UserId }, new { @class = "vote-link-voted" })</h6>
+					}
+					else
+					{
+						<h6>@Html.ActionLink("Vote Up", "CastUpVote", "Votes", new { qId = Model.Question.Id, userId = Model.UserId }, new { @class = "vote-link-unvoted" })</h6>
+
+					}
+					<h6>Vote Score (@Model.Question.VoteTotal)</h6>
+					@if (Model.UserQuestionVote == false)
+					{
+						<h6>@Html.ActionLink("Un-Downvote", "CastDownVote", "Votes", new { qId = Model.Question.Id, userId = Model.UserId }, new { @class = "vote-link-voted" })</h6>
+					}
+					else
+					{
+						<h6>@Html.ActionLink("Vote Down", "CastDownVote", "Votes", new { qId = Model.Question.Id, userId = Model.UserId }, new { @class = "vote-link-voted" })</h6>
+
+					}
+				</section>
+			}
 			<section class="view-question-body">
-				<p>@Model.Body</p>
+				<p>@Model.Question.Body</p>
 			</section>
 			<section class="view-question-tags">
 				<p>
 					Tags:
-					@if (Model.QuestionTags.Count == 0)
+					@if (Model.Question.QuestionTags.Count == 0)
 					{
 						<span>None</span>
 					}
 					else
 					{
-						foreach (var qt in Model.QuestionTags)
+						foreach (var qt in Model.Question.QuestionTags)
 						{
 							@Html.ActionLink(qt.Tag.Name, "TagSearch", "Questions", new { TagSelect = qt.TagId }, new { @class = "question-tag-list" })
 						}
 					}
-					@if (ViewBag.UserIsAdmin == true)
+					@if (Model.UserIsAdmin == true)
 					{
-						@Html.ActionLink("Edit the tags on this question", "EditQuestionTags", "Tags", new { id = Model.Id }, new { @class = "question-tag-list" })
+						@Html.ActionLink("Edit the tags on this question", "EditQuestionTags", "Tags", new { id = Model.Question.Id }, new { @class = "question-tag-list" })
 					}
-					</p>
+				</p>
 			</section>
 		</div>
 		<section class="view-question-comments">
-			@foreach (var comment in Model.Comments)
+			@foreach (var comment in Model.Question.CommentQuestions)
 			{
 				<div class="question-comment-div">
 					<p>@comment.ApplicationUser.UserName on @comment.Date said:</p>
 					<p>@comment.Body</p>
-					@if (ViewBag.UserIsAdmin == true)
+					@if (Model.UserIsAdmin == true)
 					{
 						@Html.ActionLink("Edit this Comment", "Edit", "CommentQuestions", new { id = comment.Id }, null)
 						<br />
@@ -57,41 +81,65 @@
 		</section>
 
 		<section class="view-question-links">
-			<p>
-				@Html.ActionLink("Answer this Question", "AnswerQuestion", new { id = Model.Id })
-			</p>
-			<p>
-				@Html.ActionLink("Comment on this Question", "CommentOnQuestion", new { id = Model.Id })
-			</p>
-			@if (ViewBag.UserIsAdmin == true)
+			@if (Model.UserMayAnswer)
 			{
 				<p>
-					@Html.ActionLink("Delete this Question", "DeleteQuestion", new { id = Model.Id })
+					@Html.ActionLink("Answer this Question", "AnswerQuestion", new { id = Model.Question.Id })
+				</p>
+			}
+			<p>
+				@Html.ActionLink("Comment on this Question", "CommentOnQuestion", new { id = Model.Question.Id })
+			</p>
+			@if (Model.UserIsAdmin == true)
+			{
+				<p>
+					@Html.ActionLink("Delete this Question", "DeleteQuestion", new { id = Model.Question.Id })
 				</p>
 			}
 		</section>
 
 		<section class="view-question-answers">
-			@foreach (var answer in Model.Answers)
+			@foreach (var pair in Model.AnswersAndVotes)
 			{
-				if (answer.CorrectAnswer)
+				if (pair.Key.CorrectAnswer)
 				{
 					<div class="answer-div-correct">
-						<p>@answer.ApplicationUser.UserName answered on @answer.Date:</p>
-						<p>@answer.Body</p>
+						<p>@pair.Key.ApplicationUser.UserName (with @pair.Key.ApplicationUser.Reputation rep) answered on @pair.Key.Date:</p>
+						<p>@pair.Key.Body</p>
+						@if (Model.UserIsAuthenticated)
+						{
+							if (pair.Value == true)
+							{
+								<h6>@Html.ActionLink("Un-Upvote", "CastAnswerUpVote", "Votes", new { aId = pair.Key.Id, userId = Model.UserId }, new { @class = "vote-link-voted" })</h6>
+							}
+							else
+							{
+								<h6>@Html.ActionLink("Vote Up", "CastAnswerUpVote", "Votes", new { aId = pair.Key.Id, userId = Model.UserId }, new { @class = "vote-link-unvoted" })</h6>
+
+							}
+							<h6>Answer Vote Score: @pair.Key.VoteTotal</h6>
+							if (pair.Value == false)
+							{
+								<h6>@Html.ActionLink("Un-Downvote", "CastAnswerDownVote", "Votes", new { aId = pair.Key.Id, userId = Model.UserId }, new { @class = "vote-link-voted" })</h6>
+							}
+							else
+							{
+								<h6>@Html.ActionLink("Vote Down", "CastAnswerDownVote", "Votes", new { aId = pair.Key.Id, userId = Model.UserId }, new { @class = "vote-link-voted" })</h6>
+							}
+						}
 						<p>
-							@Html.ActionLink("Comment on this Answer", "CommentOnAnswer", new { id = answer.Id })
+							@Html.ActionLink("Comment on this Answer", "CommentOnAnswer", new { id = pair.Key.Id })
 						</p>
-						@if (ViewBag.SolutionMarkable == true)
+						@if (Model.SolutionMarkable == true)
 						{
 							<p>
-								@Html.ActionLink("Mark this solution as correct", "MarkSolution", new { id = answer.Id })
+								@Html.ActionLink("Mark this solution as correct", "MarkSolution", new { id = pair.Key.Id })
 							</p>
 						}
-						@if (ViewBag.UserIsAdmin == true)
+						@if (Model.UserIsAdmin == true)
 						{
 							<p>
-								@Html.ActionLink("Delete this Answer", "DeleteAnswer", new { id = answer.Id })
+								@Html.ActionLink("Delete this Answer", "DeleteAnswer", new { id = pair.Key.Id })
 							</p>
 						}
 					</div>
@@ -99,32 +147,54 @@
 				else
 				{
 					<div class="answer-div">
-						<p>@answer.ApplicationUser.UserName answered on @answer.Date:</p>
-						<p>@answer.Body</p>
+						<p>@pair.Key.ApplicationUser.UserName (with @pair.Key.ApplicationUser.Reputation rep) answered on @pair.Key.Date:</p>
+						<p>@pair.Key.Body</p>
+						@if (Model.UserIsAuthenticated)
+						{
+							if (pair.Value == true)
+							{
+								<h6>@Html.ActionLink("Un-Upvote", "CastAnswerUpVote", "Votes", new { aId = pair.Key.Id, userId = Model.UserId }, new { @class = "vote-link-voted" })</h6>
+							}
+							else
+							{
+								<h6>@Html.ActionLink("Vote Up", "CastAnswerUpVote", "Votes", new { aId = pair.Key.Id, userId = Model.UserId }, new { @class = "vote-link-unvoted" })</h6>
+
+							}
+							<h6>Answer Vote Score: @pair.Key.VoteTotal</h6>
+							if (pair.Value == false)
+							{
+								<h6>@Html.ActionLink("Vote Down", "CastAnswerDownVote", "Votes", new { aId = pair.Key.Id, userId = Model.UserId }, new { @class = "vote-link-voted" })</h6>
+							}
+							else
+							{
+								<h6>@Html.ActionLink("Un-Downvote", "CastAnswerDownVote", "Votes", new { aId = pair.Key.Id, userId = Model.UserId }, new { @class = "vote-link-voted" })</h6>
+							}
+						}
+
 						<p>
-							@Html.ActionLink("Comment on this Answer", "CommentOnAnswer", new { id = answer.Id })
+							@Html.ActionLink("Comment on this Answer", "CommentOnAnswer", new { id = pair.Key.Id })
 						</p>
-						@if (ViewBag.SolutionMarkable == true)
+						@if (Model.SolutionMarkable == true)
 						{
 							<p>
-								@Html.ActionLink("Mark this solution as correct", "MarkSolution", new { id = answer.Id })
+								@Html.ActionLink("Mark this solution as correct", "MarkSolution", new { id = pair.Key.Id })
 							</p>
 						}
-						@if (ViewBag.UserIsAdmin == true)
+						@if (Model.UserIsAdmin == true)
 						{
 							<p>
-								@Html.ActionLink("Delete this Answer", "DeleteAnswer", new { id = answer.Id })
+								@Html.ActionLink("Delete this Answer", "DeleteAnswer", new { id = pair.Key.Id })
 							</p>
 						}
 					</div>
 				}
 				<div class="answer-comment-container-div">
-					@foreach (var comment in answer.Comments)
+					@foreach (var comment in pair.Key.Comments)
 					{
 						<div class="answer-comment-div">
 							<p>@comment.ApplicationUser.UserName on @comment.Date said:</p>
 							<p>@comment.Body</p>
-							@if (ViewBag.UserIsAdmin == true)
+							@if (Model.UserIsAdmin == true)
 							{
 								@Html.ActionLink("Edit this Comment", "Edit", "CommentAnswers", new { id = comment.Id }, null)
 								<br />
